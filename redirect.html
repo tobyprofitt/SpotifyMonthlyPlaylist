@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Playlist Creator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Creating your playlist...</h2>
+    <p id="status"></p>
+
+    <script>
+        $(document).ready(function() {
+            // Extract the authorization code from the URL
+            let params = new URLSearchParams(window.location.search);
+            let code = params.get('code');
+
+            if (!code) {
+                $('#status').text('Error: Authorization code not found.');
+                return;
+            }
+
+            // Send the authorization code to the Lambda function
+            let data = {
+                playlist_title: 'Monthly Top 20',
+                playlist_description: 'My top 20 tracks from the last 4 weeks.',
+                code: code
+            };
+
+            $.ajax({
+                url: 'https://5zj71m0jd3.execute-api.ap-southeast-2.amazonaws.com/prod/create-playlist',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    $('#status').text(response.message);
+                },
+                error: function(error) {
+                    $('#status').text('Error: ' + error.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
