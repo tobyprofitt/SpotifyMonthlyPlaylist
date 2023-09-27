@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Top 20s</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1ED760;
+            color: #FFFFFF;
+            padding: 5% 10%;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #FFFFFF;
+            color: #1ED760;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        button:hover {
+            background-color: #333333;
+            color: #FFFFFF;
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Monthly Top 20s</h1>
+    <p>Every month, capture a musical snapshot!</p>
+    <p>Discover and save your top 20 songs from the past month into a Spotify playlist.</p>
+    <button onclick="initiateSpotifyAuth()">Capture My Monthly Top 20!</button>
+    <p>Come back at the end of each month to create a new musical time capsule!</p>
+    <footer>© 2023 Monthly Top 20s</footer>
+
+    <script>
+        function initiateSpotifyAuth() {
+            // Redirect to the Spotify authentication URL (to be filled in)
+            window.location.href = 'https://accounts.spotify.com/authorize?client_id=d226cb1348484b019d632c263a4bc270&response_type=code&redirect_uri=http://spotify-redirect-page.s3-website-ap-southeast-2.amazonaws.com&scope=playlist-modify-public user-top-read';
+        }
+    </script>
+</body>
+
+</html>

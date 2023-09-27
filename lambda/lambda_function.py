@@ -51,24 +51,35 @@ def lambda_handler(event, context):
 
     # Create playlist
     user_id = sp.me()['id']
-    sp.user_playlist_create(user=user_id, name=playlist_title, description=playlist_desc)
+    print(1)
+    playlist = sp.user_playlist_create(user=user_id, name=playlist_title, description=playlist_desc)
 
     # Get top 20 tracks
+    print(2)
     results = sp.current_user_top_tracks(time_range='short_term', limit=20)
+    print(3)
     tids = [item['uri'] for item in results['items']]
+    print(4)
+    song_names = [item['name'] for item in results['items']]
+    print(5)
 
-    # Get latest playlist ID (should be the one just created)
-    playlist_id = sp.current_user_playlists()['items'][0]['id']
+    # Add tracks to the playlist
+    sp.user_playlist_add_tracks(user=user_id, playlist_id=playlist['id'], tracks=tids)
+    print(6)
 
-    sp.playlist_add_items(playlist_id, tids)
-
-    # Return a success response
-    response = {
-        'statusCode': 200,
-        'body': json.dumps({'message': 'Playlist created successfully!'}),
-        'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'  # Allow CORS
-        }
+    # Return the playlist URL and top 20 songs
+    response_body = {
+        'songs': song_names,
+        'playlist_link': playlist['external_urls']['spotify']
     }
-    return response
+
+    return {
+    'statusCode': 200,
+    'headers': {
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+    },
+    'body': json.dumps(response_body)
+}
+
