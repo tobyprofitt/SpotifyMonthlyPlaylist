@@ -5,29 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify Playlist Creator</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        a {
+            color: #1DB954;
+            text-decoration: none;
+            border: 1px solid #1DB954;
+            padding: 10px 15px;
+            border-radius: 25px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #1DB954;
+            color: #121212;
+        }
+    </style>
 </head>
 <body>
     <h2>Creating your playlist...</h2>
     <p id="status"></p>
-
+    <div id="songsList"></div>
+    <div id="playlistLink"></div>
     <script>
+        // Define the data variable globally
+        let data = {};
+    
         $(document).ready(function() {
             // Extract the authorization code from the URL
             let params = new URLSearchParams(window.location.search);
             let code = params.get('code');
-
+    
             if (!code) {
                 $('#status').text('Error: Authorization code not found.');
                 return;
             }
-
-            // Send the authorization code to the Lambda function
-            let data = {
+    
+            // Populate the global data variable
+            data = {
                 playlist_title: 'Monthly Top 20',
                 playlist_description: 'My top 20 tracks from the last 4 weeks.',
                 code: code
             };
-
+    
+            // Send the data to the Lambda function
             $.ajax({
                 url: 'https://5zj71m0jd3.execute-api.ap-southeast-2.amazonaws.com/prod/create-playlist',
                 type: 'POST',
@@ -35,6 +68,21 @@
                 contentType: 'application/json',
                 success: function(response) {
                     $('#status').text(response.message);
+                    if (response.songs) {
+                        let songList = document.getElementById("songsList");
+                        response.songs.forEach((song, index) => {
+                            let listItem = document.createElement("div");
+                            listItem.textContent = (index + 1) + ". " + song; // Add number before song
+                            songList.appendChild(listItem);
+                        });
+                    }
+                    if (response.playlist_link) {
+                        let playlistLinkDiv = document.getElementById("playlistLink");
+                        let link = document.createElement("a");
+                        link.href = response.playlist_link;
+                        link.textContent = "Open Playlist";
+                        playlistLinkDiv.appendChild(link);
+                    }
                 },
                 error: function(error) {
                     $('#status').text('Error: ' + error.responseText);
@@ -43,37 +91,5 @@
         });
     </script>
 <div id="songsList"></div><div id="playlistLink"></div>
-<script type="text/javascript">
-    // This function is executed once the page is loaded
-    window.onload = function() {
-        // Fetch the data from your Lambda function via API Gateway
-        fetch('https://5zj71m0jd3.execute-api.ap-southeast-2.amazonaws.com/prod',
-            {method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)}) 
-        .then(response => {
-            console.log("Raw response from API:", response);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Parsed response:", data);
-            document.getElementById("playlistLink").href = data.playlist_link;
-            let songList = document.getElementById("songs");
-            data.songs.forEach(song => {
-                let listItem = document.createElement("li");
-                listItem.textContent = song;
-                songList.appendChild(listItem);
-            });
-        })
-        .catch(error => {
-            console.log("Error fetching the data:", error);
-        });
-    };
-</script>
 </body>
 </html>
