@@ -11,3 +11,7 @@ Testing: <https://accounts.spotify.com/authorize?client_id=d226cb1348484b019d632
 Spotify auth flow: <https://developer.spotify.com/documentation/web-api/tutorials/code-flow>
 
 Front end: <http://my-top-20s.s3-website-ap-southeast-2.amazonaws.com/>
+
+[Front End](frontend.png)
+
+[Result](redirect.png)
