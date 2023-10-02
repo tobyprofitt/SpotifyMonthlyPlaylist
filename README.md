@@ -12,6 +12,10 @@ Spotify auth flow: <https://developer.spotify.com/documentation/web-api/tutorial
 
 Front end: <http://my-top-20s.s3-website-ap-southeast-2.amazonaws.com/>
 
-[Front End](frontend.png)
+## Front end
 
-[Result](redirect.png)
+![Front End](frontend.png)
+
+## Results
+
+![Result](redirect.png)
