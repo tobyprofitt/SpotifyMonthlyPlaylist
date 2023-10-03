@@ -1,0 +1,29 @@
+ +---------+       +-------------+        +----------------+      +--------------+
+ | User's  |       | Spotify's   |        |    Frontend    |      | AWS Services |
+ | Browser |       | Auth Page   |        | (redirect.html)|      | (Lambda,     |
+ +----+----+       +------+------+        +-------+--------+      |  API Gateway)|
+      |                   |               |                |      +--------+-----+
+      |------------------>|               |                |               |
+      |    Visit &        |               |                |               |
+      |    Click on       |               |                |               |
+      |    "Capture"      |               |                |               |
+      |                   |-------------->|                |               |
+      |      Redirect     |   Auth Code   |                |               |
+      |                   |               |                |               |
+      |                   |               |----------------|-------------->|
+      |                   |               | AJAX Request   |   Process &   |
+      |                   |               |                |    Fetch      |
+      |                   |               |                |   from        |
+      |                   |               |                |   Spotify     |
+      |                   |               |<---------------|---------------|
+      |                   |               | Display Songs  |               |
+      |<------------------|---------------| & Playlist     |               |
+ View & Play              |               | Link           |               |
+ in Spotify               |               |                |               |
+      |                   |               |                |               |
+ +----+----+       +------+-----+         +------+---------+      +--------+-----+
+ | User's  |       | Spotify's  |         |    Frontend    |      | AWS Services |
+ | Browser |       | Auth Page  |         | (redirect.html)|      | (Lambda,     |
+ +---------+       +------------+         +----------------+      |  API Gateway)|
+                                                                  +--------------+
+
