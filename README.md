@@ -2,7 +2,16 @@
 
 A simple web app to create a playlist from a user's most played songs.
 
-## End points
+## To do list
+
+1. embed diagram in readme
+2. print artist next to song title
+3. add date to title
+4. add ability to customise number (Top 10, Top 30)
+5. add ability to customise time frame (top ever, last 6 months, last 4 weeks) with descriptions
+6. donation link if it gets any traction
+
+## End points for testing only
 
 Static s3 endpoint: <http://spotify-redirect-page.s3-website-ap-southeast-2.amazonaws.com>
 
