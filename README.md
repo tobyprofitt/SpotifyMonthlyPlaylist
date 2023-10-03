@@ -28,3 +28,7 @@ Front end: <http://my-top-20s.s3-website-ap-southeast-2.amazonaws.com/>
 ## Results
 
 ![Result](redirect.png)
+
+## Architecture
+
+![Architecture](Monthly Top 20 Architecture.png)
