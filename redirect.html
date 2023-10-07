@@ -7,30 +7,92 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            background-color: #121212;
-            color: #FFFFFF;
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            background-color: #181818;
+            color: #1DB954; /* Spotify green color */
+            text-align: center;
+            padding: 50px;
         }
+        
         h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        #status {
+            font-size: 18px;
             margin-bottom: 20px;
         }
-        a {
+
+        #songsList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #songsList div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        #songsList img {
+            margin-right: 20px;
+        }
+
+        #songsList a {
             color: #1DB954;
             text-decoration: none;
-            border: 1px solid #1DB954;
-            padding: 10px 15px;
-            border-radius: 25px;
-            margin-top: 20px;
-            transition: background-color 0.3s;
         }
-        a:hover {
+
+        #songsList a:hover {
+            text-decoration: underline;
+        }
+
+        #playlistLink a {
+            color: #fff;
             background-color: #1DB954;
-            color: #121212;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+
+        #playlistLink a:hover {
+            background-color: #18a045; /* slightly darker shade of green */
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        /* Modal Content */
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 50%;
+            max-width: 500px;
+        }
+        
+        /* Close button */
+        .close {
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -70,12 +132,73 @@
                     $('#status').text(response.message);
                     if (response.songs) {
                         let songList = document.getElementById("songsList");
-                        response.songs.forEach((song, index) => {
+                        
+                        let count = 1;
+                        response.songs.forEach(item => {
                             let listItem = document.createElement("div");
-                            listItem.textContent = (index + 1) + ". " + song; // Add number before song
+                            listItem.style.display = "flex";
+                            listItem.style.justifyContent = "space-between"; // Places content on both ends of the container
+
+                            // Song name with Spotify link
+                            let songLink = document.createElement("a");
+                            songLink.href = item['external_urls']['spotify'];
+                            songLink.textContent = count + ". " + item['name'] + " by " + item['artists'][0]['name'];
+                            songLink.target = "_blank"; // Open in a new tab
+                            songLink.style.textAlign = "left";  // Left-aligning the song details
+                            listItem.appendChild(songLink);
+
+                            // Album art
+                            let albumArtButton = document.createElement("button");
+                            albumArtButton.textContent = "View Album Art";
+                            albumArtButton.style.marginLeft = "10px"; // Spacing from the song name
+                            albumArtButton.style.backgroundColor = "#1DB954"; // Spotify green
+                            albumArtButton.style.border = "none";
+                            albumArtButton.style.padding = "5px 10px";
+                            albumArtButton.style.color = "white";
+                            albumArtButton.style.cursor = "pointer";
+                            albumArtButton.style.borderRadius = "5px";
+                            albumArtButton.onmouseover = function() {
+                                this.style.backgroundColor = "#1ED760"; // Slightly lighter green for hover effect
+                            };
+                            albumArtButton.onmouseout = function() {
+                                this.style.backgroundColor = "#1DB954"; // Revert to original green
+                            };
+                            albumArtButton.onclick = function() {
+                                let modal = document.createElement("div");
+                                modal.style.display = "block";
+                                modal.style.width = "100%";
+                                modal.style.height = "100%";
+                                modal.style.position = "fixed";
+                                modal.style.top = "0";
+                                modal.style.left = "0";
+                                modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Semi-transparent background
+                                modal.style.zIndex = "1000";
+                                modal.style.overflow = "auto"; // In case the image is too big
+
+                                let img = document.createElement("img");
+                                img.src = item['album']['images'][0]['url'];
+                                img.alt = "Album Cover";
+                                img.style.display = "block";
+                                img.style.margin = "50px auto"; // Center the image vertically
+                                img.style.maxWidth = "80%"; // Makes sure it doesn't get too big
+                                img.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.1)"; // Adds a little shadow for depth
+
+                                modal.appendChild(img);
+
+                                // Close the modal when it's clicked
+                                modal.onclick = function() {
+                                    document.body.removeChild(modal);
+                                };
+
+                                document.body.appendChild(modal);
+                            };
+                            listItem.appendChild(albumArtButton);
+
                             songList.appendChild(listItem);
+                            count++;
                         });
                     }
+
                     if (response.playlist_link) {
                         let playlistLinkDiv = document.getElementById("playlistLink");
                         let link = document.createElement("a");
@@ -90,6 +213,10 @@
             });
         });
     </script>
-<div id="songsList"></div><div id="playlistLink"></div>
+<div id="songsList"></div>
+<div id="playlistLink"></div>
+<footer style="margin-top: 20px; text-align: center;">
+    <p>Powered by <img src="Spotify_Logo_CMYK_Green.png" alt="Spotify Logo" width="80" /></p>
+</footer>
 </body>
 </html>

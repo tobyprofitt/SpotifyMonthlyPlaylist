@@ -60,7 +60,8 @@ def lambda_handler(event, context):
     print(3)
     tids = [item['uri'] for item in results['items']]
     print(4)
-    song_names = [item['name'] for item in results['items']]
+    for item in results['items']:
+        print(item)
     print(5)
 
     # Add tracks to the playlist
@@ -69,7 +70,7 @@ def lambda_handler(event, context):
 
     # Return the playlist URL and top 20 songs
     response_body = {
-        'songs': song_names,
+        'songs': results['items'],
         'playlist_link': playlist['external_urls']['spotify']
     }
 
