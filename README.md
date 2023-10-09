@@ -2,7 +2,7 @@
 
 A simple web app to create a playlist from a user's most played songs.
 
-## To do list
+## To do list / feature roadmap
 
 1. embed diagram in readme
 2. print artist next to song title
@@ -10,6 +10,7 @@ A simple web app to create a playlist from a user's most played songs.
 4. add ability to customise number (Top 10, Top 30)
 5. add ability to customise time frame (top ever, last 6 months, last 4 weeks) with descriptions
 6. donation link if it gets any traction
+7. add functionality to automate users monthly and store refresh tokens securely.
 
 ## End points for testing only
 
